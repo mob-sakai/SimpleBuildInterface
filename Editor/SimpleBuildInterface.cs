@@ -45,6 +45,40 @@ internal class SimpleBuildInterface
         return success;
     }
 
+    public static Dictionary<string, string> ParseArguments(string[] arguments)
+    {
+        var argSign = new[] {'-', '/'};
+        var args = new Dictionary<string, string>();
+        var key = "";
+        for (var i = 0; i < arguments.Length; i++)
+        {
+            var arg = arguments[i];
+            if (string.IsNullOrEmpty(arg)) continue;
+            if (argSign.Contains(arg[0]))
+            {
+                var valueIndex = arg.IndexOf('=');
+                if (valueIndex == -1)
+                {
+                    key = arg.Substring(1);
+                    args[key] = "";
+                }
+                else
+                {
+                    key = arg.Substring(1, valueIndex - 1);
+                    args[key] = arg.Substring(valueIndex + 1);
+                    key = "";
+                }
+            }
+            else if (0 < key.Length)
+            {
+                args[key] = arg;
+                key = "";
+            }
+        }
+
+        return args;
+    }
+
     public static BuildPlayerOptions GetCurrentBuildPlayerOptions(BuildTarget target, string[] arguments)
     {
         var targetGroup = BuildPipeline.GetBuildTargetGroup(target);
@@ -60,6 +94,13 @@ internal class SimpleBuildInterface
 
     public static BuildPlayerOptions UpdateBuildPlayerOptions(BuildPlayerOptions options, string[] arguments)
     {
+        var args = ParseArguments(arguments);
+        string value;
+        if (args.TryGetValue("out", out value))
+            options.locationPathName = value;
+        else
+            options.locationPathName = options.target.ToString() + "_Build";
+
         return options;
     }
 
