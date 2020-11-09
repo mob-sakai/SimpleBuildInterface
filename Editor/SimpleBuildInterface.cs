@@ -45,6 +45,23 @@ internal class SimpleBuildInterface
         return success;
     }
 
+    public static BuildOptions ParseBuildOptions(string options)
+    {
+        BuildOptions retOpt = 0;
+        BuildOptions newOpt;
+        foreach (var opt in options.Split(',', ';'))
+        {
+            if (string.IsNullOrEmpty(opt)) continue;
+            if (!Enum.TryParse(opt.TrimStart('!'), true, out newOpt)) continue;
+
+            retOpt = opt[0] == '!'
+                ? retOpt & ~newOpt
+                : retOpt | newOpt;
+        }
+
+        return retOpt;
+    }
+
     public static Dictionary<string, string> ParseArguments(string[] arguments)
     {
         var argSign = new[] {'-', '/'};
@@ -100,6 +117,9 @@ internal class SimpleBuildInterface
             options.locationPathName = value;
         else
             options.locationPathName = options.target.ToString() + "_Build";
+
+        if (args.TryGetValue("buildOptions", out value))
+            options.options |= ParseBuildOptions(value);
 
         return options;
     }
