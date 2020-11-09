@@ -124,6 +124,9 @@ internal class SimpleBuildInterface
         var modifier = args.TryGetValue("scenes", out value) ? value : "";
         options.scenes = GetBuildScenes(EditorBuildSettings.scenes, modifier);
 
+        if (args.TryGetValue("assetBundleManifestPath", out value))
+            options.assetBundleManifestPath = value;
+
         return options;
     }
 
