@@ -121,7 +121,28 @@ internal class SimpleBuildInterface
         if (args.TryGetValue("buildOptions", out value))
             options.options |= ParseBuildOptions(value);
 
+        var modifier = args.TryGetValue("scenes", out value) ? value : "";
+        options.scenes = GetBuildScenes(EditorBuildSettings.scenes, modifier);
+
         return options;
+    }
+
+    public static string[] GetBuildScenes(EditorBuildSettingsScene[] scenes, string modifier)
+    {
+        if (string.IsNullOrEmpty(modifier))
+            return scenes
+                .Where(x => x.enabled)
+                .Select(x => x.path)
+                .ToArray();
+
+        var mods = modifier.Split(',', ';');
+        var add = mods.Where(x => 0 < x.Length && x[0] != '!').ToArray();
+        var remove = mods.Where(x => 1 < x.Length && x[0] == '!').Select(x => x.Substring(1)).ToArray();
+        return scenes
+            .Select(x => new {x.path, x.enabled, name = Path.GetFileNameWithoutExtension(x.path)})
+            .Where(x => !remove.Contains(x.name) && (x.enabled || add.Contains(x.name)))
+            .Select(x => x.path)
+            .ToArray();
     }
 
     public static bool ValidBuildPlayerOptions(bool isBatchMode, ref BuildPlayerOptions options)
