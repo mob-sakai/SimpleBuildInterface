@@ -12,7 +12,9 @@ using UnityEngine;
 
 internal class SimpleBuildInterface
 {
+#if !UNITY_2020_1_OR_NEWER
     static string s_OldSymbols = null;
+#endif
 
     [InitializeOnLoadMethod]
     private static void OnInitializeOnLoadMethod()
@@ -36,11 +38,19 @@ internal class SimpleBuildInterface
 
         if (ValidBuildPlayerOptions(isBatchMode, ref options))
         {
-            options = UpdateBuildPlayerOptions(options, arguments);
+            options = UpdateBuildPlayerOptions(options, arguments, true);
             options.options |= BuildOptions.ShowBuiltPlayer;
             var report = BuildPipeline.BuildPlayer(options);
             success = report.summary.result == BuildResult.Succeeded;
         }
+
+#if !UNITY_2020_1_OR_NEWER
+        if (!string.IsNullOrEmpty(s_OldSymbols))
+        {
+            PlayerSettings.SetScriptingDefineSymbolsForGroup(options.targetGroup, s_OldSymbols);
+            s_OldSymbols = null;
+        }
+#endif
 
         return success;
     }
@@ -106,10 +116,10 @@ internal class SimpleBuildInterface
             locationPathName = EditorUserBuildSettings.GetBuildLocation(target),
         };
 
-        return UpdateBuildPlayerOptions(options, arguments);
+        return UpdateBuildPlayerOptions(options, arguments, false);
     }
 
-    public static BuildPlayerOptions UpdateBuildPlayerOptions(BuildPlayerOptions options, string[] arguments)
+    public static BuildPlayerOptions UpdateBuildPlayerOptions(BuildPlayerOptions options, string[] arguments, bool updateSymbols)
     {
         var args = ParseArguments(arguments);
         string value;
@@ -126,6 +136,16 @@ internal class SimpleBuildInterface
 
         if (args.TryGetValue("assetBundleManifestPath", out value))
             options.assetBundleManifestPath = value;
+
+        if (updateSymbols && args.TryGetValue("extraScriptingDefines", out value))
+        {
+#if UNITY_2020_1_OR_NEWER
+            options.extraScriptingDefines = value.Split(',', ';');
+#else
+            s_OldSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(options.targetGroup);
+            PlayerSettings.SetScriptingDefineSymbolsForGroup(options.targetGroup, s_OldSymbols + ";" + value);
+#endif
+        }
 
         return options;
     }
