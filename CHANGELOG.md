@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/mob-sakai/SimpleBuildInterface/compare/1.1.0...1.2.0) (2020-11-10)
+
+
+### Features
+
+* build report logging ([8d0199c](https://github.com/mob-sakai/SimpleBuildInterface/commit/8d0199c42b724c156d1bde075ed7e2835b065bac))
+
 # [1.1.0](https://github.com/mob-sakai/SimpleBuildInterface/compare/1.0.0...1.1.0) (2020-11-10)
 
 
