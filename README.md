@@ -22,17 +22,31 @@ Simple Build Interface for Unity CLI
 Unity supports to build for standalone platforms (Windows/macOS/Linux) from the command line.
 
 ```sh
--buildLinux64Player <pathname>
--buildOSXUniversalPlayer <pathname>
--buildWindowsPlayer <pathname>
--buildWindows64Player <pathname>
+# Lunch Unity to ...
+/Applications/Unity/Unity.app/Contents/MacOS/Unity -batchmode -projectPath .
+
+# build for specific standalone platform.
+... -buildLinux64Player <pathname>
+... -buildOSXUniversalPlayer <pathname>
+... -buildWindowsPlayer <pathname>
+... -buildWindows64Player <pathname>
 ```
 
 This plugin provides a simple build interface to build all platforms **without `executeMethod` option**.
 
 ```sh
--build -buildTarget WebGL
+# Lunch Unity to ...
+/Applications/Unity/Unity.app/Contents/MacOS/Unity -batchmode -projectPath .
+
+# build for specific platform.
+... -build -buildTarget WebGL
 ```
+
+This command is equivalent to run `Build Settings > Build` on WebGL platform.
+
+![](https://user-images.githubusercontent.com/12690315/98614365-a13b6900-233b-11eb-8529-05a49fc7000e.png)
+
+See [Usage](#usage) for details.
 
 <br><br><br><br>
 
@@ -88,18 +102,19 @@ Or, use [UpmGitExtension](https://github.com/mob-sakai/UpmGitExtension) to insta
   -extraScriptingDefines "EXTRA_SYMBOL;EXTRA_SYMBOL2"
 ```
 
-| Option                                 | Description                                              |
-| -------------------------------------- | -------------------------------------------------------- |
-| `-build`                               | **(Required)**<br>Build the project for current platform |
-| `-out <path>`                          | Output path<br>Default: `{BuildTarget}_Build`            |
-| `-buildOptions <options,...>`          | Add/remove [BuildOptions][opt] to build                  |
-| `-scenes <names,...>`                  | Add/remove scene names to build                          |
-| `-assetBundleManifestPath <path>`      | Path to AssetBundleManifest                              |
-| `-extraScriptingDefines <symbols,...>` | Extra scripting defines for building player              |
+| Option                                 | Description                                                                        |
+| -------------------------------------- | ---------------------------------------------------------------------------------- |
+| `-build`                               | **(Required)**<br>Build the project for current. platform                          |
+| `-out <path>`                          | Output path<br>Default: `{BuildTarget}._Build`                                     |
+| `-buildOptions <options,...>`          | Add/remove [BuildOptions][opt] to build. <sup>[1](#fn1)</sup> <sup>[2](#fn2)</sup> |
+| `-scenes <names,...>`                  | Add/remove scene names to build.  <sup>[1](#fn1)</sup> <sup>[2](#fn2)</sup>        |
+| `-assetBundleManifestPath <path>`      | Path to AssetBundleManifest.                                                       |
+| `-extraScriptingDefines <symbols,...>` | Extra scripting defines for building player.  <sup>[1](#fn1)</sup>                 |
 
-* `-buildOptions` and `-scenes` options support multiple values.
-  * Multiple values must be separated by a semi-colon (`;`) or a comma (`,`).
-  * You can prefix a 'not' (`!`) to exclude the specified value.
+<br>
+
+<a name="fn1">1</a>: Multiple values must be separated by a semi-colon (`;`) or a comma (`,`).  
+<a name="fn2">2</a>: Prefix 'not' (`!`) to exclude the specified value.
 
 [opt]: https://docs.unity3d.com/ScriptReference/BuildOptions.html
 
@@ -113,7 +128,7 @@ Or, use [UpmGitExtension](https://github.com/mob-sakai/UpmGitExtension) to insta
 2. `InitializeOnLoadMethod`
 3. `DidReloadScripts`
 4. The method specified by the `-executeMethod` option
-5. Build by this plugin
+5. **Build by this plugin**
 
 You can customize the build parameters using any method you like. :)
 
