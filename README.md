@@ -105,7 +105,7 @@ Or, use [UpmGitExtension](https://github.com/mob-sakai/UpmGitExtension) to insta
 | Option                                 | Description                                                                        |
 | -------------------------------------- | ---------------------------------------------------------------------------------- |
 | `-build`                               | **(Required)**<br>Build the project for current. platform                          |
-| `-out <path>`                          | Output path<br>Default: `{BuildTarget}._Build`                                     |
+| `-out <path>`                          | Output path<br>Default: `{BuildTarget}_Build`.                                     |
 | `-buildOptions <options,...>`          | Add/remove [BuildOptions][opt] to build. <sup>[1](#fn1)</sup> <sup>[2](#fn2)</sup> |
 | `-scenes <names,...>`                  | Add/remove scene names to build.  <sup>[1](#fn1)</sup> <sup>[2](#fn2)</sup>        |
 | `-assetBundleManifestPath <path>`      | Path to AssetBundleManifest.                                                       |
