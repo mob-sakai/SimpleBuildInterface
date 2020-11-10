@@ -1,3 +1,11 @@
+# [1.1.0](https://github.com/mob-sakai/SimpleBuildInterface/compare/1.0.0...1.1.0) (2020-11-10)
+
+
+### Features
+
+* add 'SimpleBuildInterface.Build' method for -executeMethod option (legacy) ([64991eb](https://github.com/mob-sakai/SimpleBuildInterface/commit/64991eb7e12de2ec3eb0599101756fea831ea703))
+* no-quit option for extra build processes ([8b5ee73](https://github.com/mob-sakai/SimpleBuildInterface/commit/8b5ee7348b64dc7c1ae13ca1b750d3de1a1b30ad)), closes [#1](https://github.com/mob-sakai/SimpleBuildInterface/issues/1)
+
 # 1.0.0 (2020-11-09)
 
 

@@ -2,7 +2,7 @@
   "name": "com.coffee.simple-build-interface",
   "displayName": "Simple Build Interface",
   "description": "Add simple build interface for CLI.\n\n  -executeMethod SimpleBuildInterface.Build\n  [-out <output_dir>]\n  [-buildOptions <BuildOptions>]\n  [-scenes <scene_modifier>]",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "unity": "2018.1",
   "license": "MIT",
   "repository": {
