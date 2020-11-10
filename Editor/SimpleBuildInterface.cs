@@ -24,11 +24,15 @@ internal class SimpleBuildInterface
         var args = ParseArguments(Environment.GetCommandLineArgs());
         if (!args.ContainsKey("build")) return;
 
-        EditorApplication.delayCall += () =>
-        {
-            var success = Build(EditorUserBuildSettings.activeBuildTarget, Environment.GetCommandLineArgs(), Application.isBatchMode);
-            EditorApplication.Exit(success ? 0 : 1);
-        };
+        EditorApplication.delayCall += Build;
+    }
+
+    private static void Build()
+    {
+        var arguments = Environment.GetCommandLineArgs();
+        var success = Build(EditorUserBuildSettings.activeBuildTarget, arguments, Application.isBatchMode);
+
+        EditorApplication.Exit(success ? 0 : 1);
     }
 
     public static bool Build(BuildTarget target, string[] arguments, bool isBatchMode)
