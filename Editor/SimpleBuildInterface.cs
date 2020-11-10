@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
@@ -48,6 +49,7 @@ internal class SimpleBuildInterface
             options = UpdateBuildPlayerOptions(options, arguments, true);
             options.options |= BuildOptions.ShowBuiltPlayer;
             var report = BuildPipeline.BuildPlayer(options);
+            ReportLogging(report);
             success = report.summary.result == BuildResult.Succeeded;
         }
 
@@ -60,6 +62,25 @@ internal class SimpleBuildInterface
 #endif
 
         return success;
+    }
+
+    private static void ReportLogging(BuildReport report)
+    {
+        var sb = new StringBuilder();
+        sb.AppendFormat("#### BUILD REPORT: result = {0}, totalTime = {1} ####\n", report.summary.result, report.summary.totalTime);
+
+        for (var i = 0; i < report.steps.Length; i++)
+        {
+            var step = report.steps[i];
+            sb.AppendFormat("==== BUILD STEP ({0}/{1}) {2}\n", i + 1, report.steps.Length, step.name);
+            foreach (var m in step.messages)
+            {
+                if (m.type != LogType.Log || m.type != LogType.Warning) continue;
+                sb.AppendFormat("[{0}] {1}\n", m.type, m.content);
+            }
+        }
+
+        Debug.Log(sb);
     }
 
     public static BuildOptions ParseBuildOptions(string options)
