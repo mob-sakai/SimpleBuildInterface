@@ -42,24 +42,32 @@ internal class SimpleBuildInterface
     public static bool Build(BuildTarget target, string[] arguments, bool isBatchMode)
     {
         var success = false;
-        var options = GetCurrentBuildPlayerOptions(target, arguments);
 
-        if (ValidBuildPlayerOptions(isBatchMode, ref options))
+        try
         {
-            options = UpdateBuildPlayerOptions(options, arguments, true);
-            options.options |= BuildOptions.ShowBuiltPlayer;
-            var report = BuildPipeline.BuildPlayer(options);
-            ReportLogging(report);
-            success = report.summary.result == BuildResult.Succeeded;
-        }
+            var options = GetCurrentBuildPlayerOptions(target, arguments);
+
+            if (ValidBuildPlayerOptions(isBatchMode, ref options))
+            {
+                options = UpdateBuildPlayerOptions(options, arguments, true);
+                options.options |= BuildOptions.ShowBuiltPlayer;
+                var report = BuildPipeline.BuildPlayer(options);
+                ReportLogging(report);
+                success = report.summary.result == BuildResult.Succeeded;
+            }
 
 #if !UNITY_2020_1_OR_NEWER
-        if (!string.IsNullOrEmpty(s_OldSymbols))
-        {
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(options.targetGroup, s_OldSymbols);
-            s_OldSymbols = null;
-        }
+            if (!string.IsNullOrEmpty(s_OldSymbols))
+            {
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(options.targetGroup, s_OldSymbols);
+                s_OldSymbols = null;
+            }
 #endif
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
 
         return success;
     }
