@@ -183,6 +183,12 @@ internal class SimpleBuildInterface
 #endif
         }
 
+        // FileNotFoundException Build.data.gz.compressed (2020.1+, Linux, WebGL)
+        // https://forum.unity.com/threads/filenotfoundexception-build-data-gz-compressed.956394/
+#if UNITY_2020_1_OR_NEWER && UNITY_EDITOR_LINUX && UNITY_WEBGL
+        PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
+#endif
+
         return options;
     }
 
