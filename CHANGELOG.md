@@ -1,3 +1,11 @@
+## [1.2.1](https://github.com/mob-sakai/SimpleBuildInterface/compare/1.2.0...1.2.1) (2020-12-26)
+
+
+### Bug Fixes
+
+* catch build exception ([4311897](https://github.com/mob-sakai/SimpleBuildInterface/commit/4311897ecbc50b79a96ad1a21b926dc6283e5f6c))
+* FileNotFoundException Build.data.gz.compressed (2020.1+, Linux, WebGL) ([bf99d34](https://github.com/mob-sakai/SimpleBuildInterface/commit/bf99d3438e75809b018e13bc15e1aee49f43474b))
+
 # [1.2.0](https://github.com/mob-sakai/SimpleBuildInterface/compare/1.1.0...1.2.0) (2020-11-10)
 
 
