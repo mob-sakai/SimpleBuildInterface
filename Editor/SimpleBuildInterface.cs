@@ -34,7 +34,8 @@ internal class SimpleBuildInterface
         var success = Build(EditorUserBuildSettings.activeBuildTarget, arguments, Application.isBatchMode);
 
         // Do not exit for extra post process.
-        if (ParseArguments(arguments).ContainsKey("no-quit")) return;
+        var args = ParseArguments(Environment.GetCommandLineArgs());
+        if (args.ContainsKey("no-quit") || args.ContainsKey("noquit")) return;
 
         EditorApplication.Exit(success ? 0 : 1);
     }
