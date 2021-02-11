@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/mob-sakai/SimpleBuildInterface/compare/1.2.1...1.2.2) (2021-02-11)
+
+
+### Bug Fixes
+
+* support `-noquit` option ([65c9965](https://github.com/mob-sakai/SimpleBuildInterface/commit/65c996580e84a4c5692b3a3215ebcdbf5e17167b))
+
 ## [1.2.1](https://github.com/mob-sakai/SimpleBuildInterface/compare/1.2.0...1.2.1) (2020-12-26)
 
 
