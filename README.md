@@ -66,10 +66,11 @@ openupm add com.coffee.simple-build-interface
 
 ### Using Git
 
-Find the manifest.json file in the Packages folder of your project and add a line to `dependencies` field.
+Find `Packages/manifest.json` in your project and add a line to `dependencies` field.
 
-* Major version: ![](https://img.shields.io/github/v/release/mob-sakai/SimpleBuildInterface)  
-`"com.coffee.simple-build-interface": "https://github.com/mob-sakai/SimpleBuildInterface.git"`
+```
+"com.coffee.simple-build-interface": "https://github.com/mob-sakai/SimpleBuildInterface.git"
+```
 
 To update the package, change suffix `#{version}` to the target version.
 
