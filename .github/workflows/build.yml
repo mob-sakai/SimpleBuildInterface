@@ -1,0 +1,85 @@
+name: build
+
+on:
+  push:
+    branches:
+      - sandbox
+
+# env:
+#   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE_2018_4_25 }}
+#   projectPath: .
+#   unityVersion: 2018.4.25f1
+#   targetPlatform: StandaloneLinux64
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        projectPath:
+          - .
+        unityVersion:
+          - 2019.4.8f1
+        include:
+          # Please be polite; don't copy my personal licenses.
+          # These are here because they are needed to allowing pull requests from forks to unity-builder.
+          # You should be using ${{ secrets.UNITY_LICENSE_2019_3_15 }} here.
+          - unityVersion: 2019.4.8f1
+            license: UNITY_LICENSE_2019_4_8
+        targetPlatform:
+          # - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
+          # - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          - StandaloneLinux64 # Build a Linux 64-bit standalone.
+          # - iOS # Build an iOS player.
+          # - Android # Build an Android .apk.
+          # - StandaloneWindows # Build a Windows standalone.
+          - WebGL # WebGL.
+          # - WSAPlayer # Build an Windows Store Apps player.
+          # - PS4 # Build a PS4 Standalone.
+          # - XboxOne # Build a Xbox One Standalone.
+          # - tvOS # Build to Apple's tvOS platform.
+          # - Switch # Build a Nintendo Switch player
+    steps:
+      - uses: actions/checkout@v2
+        # with:
+        #   fetch-depth: 0
+
+      - uses: actions/cache@v2
+        with:
+          path: ${{ matrix.projectPath }}/Library
+          key: Library-${{ matrix.projectPath }}-${{ matrix.unityVersion }}-${{ matrix.targetPlatform }}
+
+      - uses: webbertakken/unity-builder@v1.5
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          # buildMethod: SimpleBuildInterface.Build
+          # customParameters: '-out /tmp/unity_build'
+          # allowDirtyBuild: true
+        env:
+          UNITY_LICENSE: ${{ secrets[matrix.license] }}
+          
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Build (${{ matrix.projectPath }}-${{ matrix.unityVersion }}-${{ matrix.targetPlatform }})
+          path: build
+
+      # - name: Commit files
+      #   shell: bash -xe {0}
+      #   run: |
+      #     # clean checkout
+      #     git checkout -f gh-pages && git clean -fd
+
+      #     # update build path
+      #     rm -rf ${{ env.projectPath }} && mv /tmp/unity_build ${{ env.projectPath }}
+
+      #     # commit
+      #     git add ${{ env.projectPath }}
+      #     git commit -a -m 'chore: auto deploy ${{ env.projectPath }}'
+
+      # - uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ github.token }}
+      #     branch: gh-pages
